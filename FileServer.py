@@ -1,5 +1,6 @@
 import socket
 import time
+import datetime
 class FileServer():
   def ServerProcess(self):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as TCPServerSocket:
@@ -12,11 +13,11 @@ class FileServer():
                 print("Cliente", Client_addr)
                 data = Client_conn.recv(self.buffer_size)
                 file_name = data.decode('utf-8')
-                print("Salvando"+file_name)
-                file_to_save = open(file_name,"wb")
+                print("Salvando "+file_name)
+                file_to_save = open(f"{datetime.datetime.today().strftime('%d-%m-%y-%I-%M-%S-%p')}_{file_name}","wb")
                 while True:
                     data = Client_conn.recv(self.buffer_size)
-                    if data == bytes("fin", 'utf-8'):
+                    if  not data:
                         break
                     file_to_save.write(data)
                 file_to_save.close()
